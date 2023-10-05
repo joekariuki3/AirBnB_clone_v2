@@ -20,6 +20,6 @@ def do_pack():
     archiveFileName = f"web_static_{ymd}{now.hour}{now.minute}{now.second}.tgz"
     local("mkdir -p versions")
     result = local(f"tar -cvzf versions/{archiveFileName} web_static")
-    if result.succeeded:
-        return local(f"realpath {archiveFileName}")
-    return None
+    if result.failed:
+        return None
+    return local(f"realpath {archiveFileName}")

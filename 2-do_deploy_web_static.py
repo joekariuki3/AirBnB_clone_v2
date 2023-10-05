@@ -23,8 +23,9 @@ def do_pack():
     archiveFileName = f"web_static_{ymd}{now.hour}{now.minute}{now.second}.tgz"
     local("mkdir -p versions")
     result = local(f"tar -cvzf versions/{archiveFileName} web_static")
-    if result.succeeded:
-        return local(f"realpath {archiveFileName}")
+    if result.failed:
+        return None
+    return local(f"realpath {archiveFileName}")
 
 
 def do_deploy(archive_path):
@@ -34,37 +35,31 @@ def do_deploy(archive_path):
     them uncompress it and remove the compessed file
     then sets the moved files to be served by the servers
     """
-    if exists(archive_path):
-        FullFileName = archive_path.split("/")[-1]
-        fileName = FullFileName.split(".")[0]
-        upload = put(f"{archive_path}", "/tmp/")
-        if upload.succeeded:
-            unarchiveDest = f"/data/web_static/releases/{fileName}"
-            mkUnarchiveDest = run(f"mkdir -p {unarchiveDest}")
-            unarchive = run(f"tar -xzf /tmp/{FullFileName} -C {unarchiveDest}")
-            # move files from subfolder to the main folder
-            run(f"mv {unarchiveDest}/web_static/* {unarchiveDest}")
-            # remove the subfolder
-            run(f"rm -rf {unarchiveDest}/web_static")
-            if unarchive.succeeded:
-                rmArchive = run(f"rm -rf /tmp/{FullFileName}")
-                if rmArchive.succeeded:
-                    rmSmLink = run("rm -rf /data/web_static/current")
-                    if rmSmLink.succeeded:
-                        smTarget = f"/data/web_static/releases/{fileName}"
-                        smName = f"/data/web_static/current"
-                        newSmLink = run(f"ln -sf {smTarget} {smName}")
-                        if newSmLink.succeeded:
-                            return True
-                        else:
-                            return False
-                    else:
-                        return False
-                else:
-                    return False
-            else:
-                return False
-        else:
-            return False
-    else:
+    if not exists(archive_path):
         return False
+    FullFileName = archive_path.split("/")[-1]
+    fileName = FullFileName.split(".")[0]
+    upload = put(f"{archive_path}", "/tmp/")
+    if upload.failed:
+        return False
+    unarchiveDest = f"/data/web_static/releases/{fileName}"
+    mkUnarchiveDest = run(f"mkdir -p {unarchiveDest}")
+    unarchive = run(f"tar -xzf /tmp/{FullFileName} -C {unarchiveDest}")
+    # move files from subfolder to the main folder
+    run(f"mv {unarchiveDest}/web_static/* {unarchiveDest}")
+    # remove the subfolder
+    run(f"rm -rf {unarchiveDest}/web_static")
+    if unarchive.failed:
+        return False
+    rmArchive = run(f"rm -rf /tmp/{FullFileName}")
+    if rmArchive.failed:
+        return False
+    rmSmLink = run("rm -rf /data/web_static/current")
+    if rmSmLink.failed:
+        return False
+    smTarget = f"/data/web_static/releases/{fileName}"
+    smName = f"/data/web_static/current"
+    newSmLink = run(f"ln -sf {smTarget} {smName}")
+    if newSmLink.failed:
+        return False
+    return True
