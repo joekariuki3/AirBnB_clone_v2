@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+<<<<<<< HEAD
 """
 fab script to compress files from
 web_static directory to a .tgz compressed files
