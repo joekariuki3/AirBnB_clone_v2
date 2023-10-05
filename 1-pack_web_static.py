@@ -22,4 +22,6 @@ def do_pack():
     result = local(f"tar -cvzf versions/{archiveFileName} web_static")
     if result.failed:
         return None
-    return local(f"realpath {archiveFileName}")
+    path = local(f"realpath versions/{archiveFileName}", capture=True)
+    archivePath = path.stdout.strip()
+    return archivePath

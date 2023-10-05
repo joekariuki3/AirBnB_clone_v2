@@ -3,6 +3,7 @@
 fab script to compress files from
 web_static directory to a .tgz compressed files
 then distribute the compressed files to our servers
+using only one function now deploy()
 """
 from fabric.api import *
 import datetime
@@ -65,3 +66,16 @@ def do_deploy(archive_path):
     if newSmLink.failed:
         return False
     return True
+
+
+def deploy():
+    """
+    Creates an achive using do_pack(),
+    then uses do_deploy(path) to move the
+    archive files to the servers
+    """
+    archive_path = do_pack()
+    if not archive_path:
+        return False
+    returnValue = do_deploy(archive_path)
+    return returnValue
