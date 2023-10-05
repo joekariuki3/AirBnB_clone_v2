@@ -40,8 +40,7 @@ def do_deploy(archive_path):
         upload = put(f"{archive_path}", "/tmp/")
         if upload.succeeded:
             unarchiveDest = f"/data/web_static/releases/{fileName}"
-            mkUnarchiveDest = run(f"sudo mkdir -p {unarchiveDest}")
-            run(f"sudo chown -R $USER:$USER /data/")
+            mkUnarchiveDest = run(f"mkdir -p {unarchiveDest}")
             unarchive = run(f"tar -xzf /tmp/{FullFileName} -C {unarchiveDest}")
             # move files from subfolder to the main folder
             run(f"mv {unarchiveDest}/web_static/* {unarchiveDest}")
