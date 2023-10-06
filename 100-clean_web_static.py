@@ -97,8 +97,10 @@ def do_clean(number=0):
         RemoteVersionList.remove(RemoteVersionList[0])
     if number > 1:
         for i in range(number):
-            versionList.remove(versionList[0])
-            RemoteVersionList.remove(RemoteVersionList[0])
+            if len(versionList) > 0:
+                versionList.remove(versionList[0])
+            if len(RemoteVersionList) > 0:
+                RemoteVersionList.remove(RemoteVersionList[0])
 
     for archive in versionList:
         rmUnwanted = local(f"rm -fR versions/{archive}")
