@@ -7,8 +7,8 @@ sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
 sudo ln -f -s /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
-sudo chown ubuntu:ubuntu /data/web_static/releases/test/index.html
 echo "Sample text" > /data/web_static/releases/test/index.html
+sudo chown ubuntu:ubuntu /data/web_static/releases/test/index.html
 sudo chown -R ubuntu:ubuntu /etc/nginx/sites-available/default
 sudo sed -i 's#root /var/www/html;#root /var/www/html;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}#1' /etc/nginx/sites-available/default
 sudo service nginx restart
