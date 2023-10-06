@@ -95,7 +95,7 @@ def do_clean(number=0):
     if number == 0 or number == 1:
         versionList.remove(versionList[0])
         RemoteVersionList.remove(RemoteVersionList[0])
-    elif number > 1:
+    if number > 1:
         for i in range(number):
             versionList.remove(versionList[0])
             RemoteVersionList.remove(RemoteVersionList[0])
