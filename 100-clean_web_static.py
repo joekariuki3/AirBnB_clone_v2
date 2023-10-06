@@ -105,4 +105,4 @@ def do_clean(number=0):
     for archive in versionList:
         rmUnwanted = local(f"rm -fR versions/{archive}")
     for archive in RemoteVersionList:
-        rmUnwanted = run(f"rm -fR /data/web_static/releases/{archive}")
+        rmUnwanted = run(f"sudo rm -fR /data/web_static/releases/{archive}")
