@@ -16,12 +16,12 @@ def do_pack():
     else return None
     """
     now = datetime.datetime.now()
-    ymd = f"{now.year}{now.month}{now.day}"
-    archiveFileName = f"web_static_{ymd}{now.hour}{now.minute}{now.second}.tgz"
+    ymdh = "{}{}{}{}".format(now.year, now.month, now.day, now.hour)
+    aFileName = "web_static_{}{}{}.tgz".format(ymdh, now.minute, now.second)
     local("mkdir -p versions")
-    result = local(f"tar -cvzf versions/{archiveFileName} web_static")
+    result = local("tar -cvzf versions/{} web_static".format(aFileName))
     if result.failed:
         return None
-    path = local(f"realpath versions/{archiveFileName}", capture=True)
+    path = local("realpath versions/{}".format(aFileName), capture=True)
     archivePath = path.stdout.strip()
     return archivePath

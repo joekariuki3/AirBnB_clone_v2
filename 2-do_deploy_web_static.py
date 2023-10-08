@@ -20,13 +20,13 @@ def do_pack():
     else return None
     """
     now = datetime.datetime.now()
-    ymd = f"{now.year}{now.month}{now.day}"
-    archiveFileName = f"web_static_{ymd}{now.hour}{now.minute}{now.second}.tgz"
+    ymdh = "{}{}{}{}".format(now.year, now.month, now.day, now.hour)
+    aFileName = "web_static_{}{}{}.tgz".format(ymdh, now.minute, now.second)
     local("mkdir -p versions")
-    result = local(f"tar -cvzf versions/{archiveFileName} web_static")
+    result = local("tar -cvzf versions/{} web_static".format(aFileName))
     if result.failed:
         return None
-    path = local(f"realpath versions/{archiveFileName}", capture=True)
+    path = local("realpath versions/{}".format(aFileName), capture=True)
     archivePath = path.stdout.strip()
     return archivePath
 
@@ -42,27 +42,27 @@ def do_deploy(archive_path):
         return False
     FullFileName = archive_path.split("/")[-1]
     fileName = FullFileName.split(".")[0]
-    upload = put(f"{archive_path}", "/tmp/")
+    upload = put("{}".format(archive_path), "/tmp/")
     if upload.failed:
         return False
-    unarchiveDest = f"/data/web_static/releases/{fileName}"
-    mkUnarchiveDest = run(f"mkdir -p {unarchiveDest}")
-    unarchive = run(f"tar -xzf /tmp/{FullFileName} -C {unarchiveDest}")
+    unarchiveD = "/data/web_static/releases/{}".format(fileName)
+    mkUnarchiveDest = run("mkdir -p {}".format(unarchiveD))
+    unarchive = run("tar -xzf /tmp/{} -C {}".format(FullFileName, unarchiveD))
     # move files from subfolder to the main folder
-    run(f"mv {unarchiveDest}/web_static/* {unarchiveDest}")
+    run("mv {}/web_static/* {}".format(unarchiveD, unarchiveD))
     # remove the subfolder
-    run(f"rm -rf {unarchiveDest}/web_static")
+    run("rm -rf {}/web_static".format(unarchiveD))
     if unarchive.failed:
         return False
-    rmArchive = run(f"rm -rf /tmp/{FullFileName}")
+    rmArchive = run("rm -rf /tmp/{}".format(FullFileName))
     if rmArchive.failed:
         return False
     rmSmLink = run("rm -rf /data/web_static/current")
     if rmSmLink.failed:
         return False
-    smTarget = f"/data/web_static/releases/{fileName}"
-    smName = f"/data/web_static/current"
-    newSmLink = run(f"ln -sf {smTarget} {smName}")
+    smTarget = "/data/web_static/releases/{}".format(fileName)
+    smName = "/data/web_static/current"
+    newSmLink = run("ln -sf {} {}".format(smTarget, smName))
     if newSmLink.failed:
         return False
     return True
