@@ -8,6 +8,7 @@ using only one function now deploy()
 from fabric.api import *
 import datetime
 from os.path import exists
+from os import listdir
 
 env.hosts = ['ubuntu@54.90.5.38', 'ubuntu@52.3.242.109']
 
@@ -90,20 +91,25 @@ def do_clean(number=0):
     locally and remote
     """
     number = int(number)
-    versionList = local("ls -t versions/", capture=True).split("\n")
-    RemoteVersionList = run("ls -t /data/web_static/releases/").split()
-    # remove ones to keep
-    if number == 0 or number == 1:
-        versionList.remove(versionList[0])
-        RemoteVersionList.remove(RemoteVersionList[0])
-    if number > 1:
-        for i in range(number):
+    with lcd('versions/'):
+        versionList = local("ls -t ./", capture=True).split("\n")
+        if number == 0 or number == 1:
             if len(versionList) > 0:
                 versionList.remove(versionList[0])
+        if number > 1:
+            for i in range(number):
+                if len(versionList) > 0:
+                    versionList.remove(versionList[0])
+        for archive in versionList:
+            rmUnwanted = local("rm -fR ./{}".format(archive))
+    with cd('/data/web_static/releases'):
+        RemoteVersionList = run("ls -t ./").split()
+        if number == 0 or number == 1:
             if len(RemoteVersionList) > 0:
                 RemoteVersionList.remove(RemoteVersionList[0])
-
-    for archive in versionList:
-        rmUnwanted = local("rm -fR versions/{}".format(archive))
-    for a in RemoteVersionList:
-        rmUnwanted = run("sudo rm -fR /data/web_static/releases/{}".format(a))
+            if number > 1:
+                for i in range(number):
+                    if len(RemoteVersionList) > 0:
+                        RemoteVersionList.remove(RemoteVersionList[0])
+        for archive in RemoteVersionList:
+            rmUnwanted = run("sudo rm -fR ./{}".format(archive))
