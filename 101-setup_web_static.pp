@@ -1,38 +1,40 @@
 # puppet manifest to prepare new server for deployment
-
+exec { 'Update lists':
+  command => '/usr/bin/apt update'
+}
 package { 'nginx':
   ensure => 'installed'
   }
 
 exec { 'make-file':
-  command => 'sudo mkdir -p /data/web_static/shared/',
+  command => 'sudo /usr/bin/mkdir -p /data/web_static/shared/',
 }
 
 exec { 'make-more-file':
-  command => 'sudo mkdir -p /data/web_static/releases/test/',
+  command => 'sudo /usr/bin/mkdir -p /data/web_static/releases/test/',
 }
 
 exec { 'make-symbolic-link':
-  command => 'sudo ln -f -s /data/web_static/releases/test/ /data/web_static/current',
+  command => 'sudo /usr/bin/ln -f -s /data/web_static/releases/test/ /data/web_static/current',
 }
 exec { 'change-permission':
-  command => 'sudo chown -R ubuntu:ubuntu /data/',
+  command => 'sudo usr/bin/chown -R ubuntu:ubuntu /data/',
 }
 
 exec { 'add-index':
-  command => 'echo "Sample text" > /data/web_static/releases/test/index.html',
+  command => '/usr/bin/echo "Sample text" > /data/web_static/releases/test/index.html',
 }
 
 exec { 'change-permission-index':
-  command => 'sudo chown ubuntu:ubuntu /data/web_static/releases/test/index.html',
+  command => 'sudo /usr/bin/chown ubuntu:ubuntu /data/web_static/releases/test/index.html',
 }
 
 exec { 'change-permission-nginx-default':
-  command => 'sudo chown -R ubuntu:ubuntu /etc/nginx/sites-available/default',
+  command => 'sudo /usr/bin/chown -R ubuntu:ubuntu /etc/nginx/sites-available/default',
 }
 
 exec { 'update-nginx-default':
-  command => "sudo sed -i 's#root /var/www/html;#root /var/www/html;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}#1' /etc/nginx/sites-available/default",
+  command => "sudo /usr/bin/sed -i 's#root /var/www/html;#root /var/www/html;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}#1' /etc/nginx/sites-available/default",
 }
 
 exec { 'restart':
