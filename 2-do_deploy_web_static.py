@@ -10,7 +10,7 @@ from os.path import exists
 
 env.hosts = ['ubuntu@54.90.5.38', 'ubuntu@52.3.242.109']
 
-
+@runs_once
 def do_pack():
     """
     a fab funtion that takes the
