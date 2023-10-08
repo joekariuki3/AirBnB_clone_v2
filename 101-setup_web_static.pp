@@ -12,37 +12,27 @@ exec { 'make-more-file':
   command => 'sudo mkdir -p /data/web_static/releases/test/',
 }
 
-file { '/data/web_static/current':
-  ensure => link,
-  links  => manage,
-  source => '/data/web_static/releases/test/'
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
+exec { 'make-symbolic-link':
+  command => 'sudo ln -f -s /data/web_static/releases/test/ /data/web_static/current',
 }
-
 exec { 'change-permission':
   command => 'sudo chown -R ubuntu:ubuntu /data/',
 }
 
-file { 'data/web_static/releases/test/index.html':
-  ensure  => 'present',
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
-  content => 'Sample text',
+exec { 'add-index':
+  command => 'echo "Sample text" > /data/web_static/releases/test/index.html',
 }
 
-
-file { '/etc/nginx/sites-available/default':
-  ensure => 'present',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
+exec { 'change-permission-index':
+  command => 'sudo chown ubuntu:ubuntu /data/web_static/releases/test/index.html',
 }
 
-file_line { 'update-default-serve-web-static':
-  ensure => 'present',
-  path   => '/etc/nginx/sites-available/default',
-  line   => "\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}",
-  after  => 'root /var/www/html;',
+exec { 'change-permission-nginx-default':
+  command => 'sudo chown -R ubuntu:ubuntu /etc/nginx/sites-available/default',
+}
+
+exec { 'update-nginx-default':
+  command => "sudo sed -i 's#root /var/www/html;#root /var/www/html;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}#1' /etc/nginx/sites-available/default",
 }
 
 exec { 'restart':
