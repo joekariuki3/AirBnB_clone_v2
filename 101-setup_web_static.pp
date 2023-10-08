@@ -4,21 +4,12 @@ package { 'nginx':
   ensure => 'installed'
   }
 
-file { ['/data',
-  '/data/web_static',
-  '/data/web_static/releases',
-  '/data/web_static/shared',
-  '/data/web_static/releases/test',]:
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
-  }
+exec { 'make-file':
+  command => 'sudo mkdir -p /data/web_static/shared/',
+}
 
-file { 'data/web_static/releases/test/index.html':
-  ensure  => present,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
-  content => 'Sample text',
+exec { 'make-more-file':
+  command => 'sudo mkdir -p /data/web_static/releases/test/',
 }
 
 file { '/data/web_static/current':
@@ -29,6 +20,18 @@ file { '/data/web_static/current':
   group  => 'ubuntu',
 }
 
+exec { 'change-permission':
+  command => 'sudo chown -R ubuntu:ubuntu /data/',
+}
+
+file { 'data/web_static/releases/test/index.html':
+  ensure  => 'present',
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  content => 'Sample text',
+}
+
+
 file { '/etc/nginx/sites-available/default':
   ensure => 'present',
   owner  => 'ubuntu',
@@ -36,7 +39,7 @@ file { '/etc/nginx/sites-available/default':
 }
 
 file_line { 'update-default-serve-web-static':
-  ensure => present,
+  ensure => 'present',
   path   => '/etc/nginx/sites-available/default',
   line   => "\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}",
   after  => 'root /var/www/html;',
