@@ -77,3 +77,9 @@ class DBStorage:
         """delete from the current database session"""
         if obj:
             self.__session.delete(obj)
+
+    def close(self):
+        """
+        remove called on session
+        """
+        self.__session.close()
