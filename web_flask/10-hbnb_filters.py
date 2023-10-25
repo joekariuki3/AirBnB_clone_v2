@@ -140,6 +140,9 @@ def states_by_id(id=0):
 
 @app.route('/hbnb_filters', strict_slashes=False)
 def filters():
+    """
+    returns the filterd data at the search bar from the db
+    """
     states = storage.all(State).values()
     amenities = storage.all(Amenity).values()
     return render_template('10-hbnb_filters.html',
