@@ -5,6 +5,7 @@ flask app hbnb
 from flask import Flask, abort, render_template
 from models import storage
 from models.state import State
+
 app = Flask(__name__)
 
 
@@ -100,6 +101,42 @@ def states_list():
     return render_template('7-states_list.html', states=states)
 
 
+@app.route('/cities_by_states', strict_slashes=False)
+def cities_by_states():
+    """
+    Display a HTML page of the States and the
+    Cities by State
+    """
+    states = storage.all(State).values()
+    cities = list()
+    for state in states:
+        for city in state.cities:
+            cities.append(city)
+    return render_template('8-cities_by_states.html',
+                           states=states, state_cities=cities)
+
+
+@app.route('/states/', strict_slashes=False)
+@app.route('/states/<id>', strict_slashes=False)
+def states_by_id(id=0):
+    """
+    display a specific state acording to the
+    passed id
+    """
+    states = storage.all(State).values()
+    if id == 0:
+        return render_template('9-states.html', states=states)
+    state_name = ''
+    cities = list()
+    for state in states:
+        if state.id == id:
+            state_name = state.name
+            for city in state.cities:
+                cities.append(city)
+    return render_template('9-states.html',
+                           state_name=state_name, cities=cities)
+
+
 @app.teardown_appcontext
 def teardown_db(error):
     """
@@ -113,4 +150,4 @@ if __name__ == '__main__':
     when run as main app
     runs on localhost and on port 5000
     """
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
