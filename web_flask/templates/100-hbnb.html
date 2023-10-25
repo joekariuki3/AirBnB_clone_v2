@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="{{ url_for('static',filename='styles/3-header.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='styles/3-footer.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='styles/6-filters.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles/8-places.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='images/icon.png') }}">
 </head>
 
@@ -27,10 +28,10 @@
 						<h2>{{state.name}}</h2>
 						<ul>
 							{% if state.cities %}
-							{% for city in state.cities %}
+							{% for city in state.cities|sort(attribute="name")%}
 							<li>{{city.name}}</li>
-							{% endfor%}
-							{% endif%}
+							{% endfor %}
+							{% endif %}
 						</ul>
 					</li>
 					{% endfor %}
@@ -41,8 +42,8 @@
 				<h3> &nbsp;</h3>
 				<h4>Internet, Kitchen...</h4>
 				<ul class="popover">
-					{% if amenities%}
-					{% for amenity in amenities|sort(attribute="name") %}
+					{% if amenities %}
+					{% for amenity in amenities|sort(attribute="name")%}
 					<li>{{amenity.name}}</li>
 					{% endfor %}
 					{% endif %}
@@ -51,6 +52,45 @@
 			<div class='buttondiv'>
 				<button>search</button>
 			</div>
+		</section>
+		<section class="places">
+			<h1>Places</h1>
+			<ul>
+				{% if places %}
+				{% for place in places|sort(attribute="name")%}
+				<li>
+					<article>
+						<div class="artical-title">
+							<div class="article-heading">
+								<h2>{{place.name}}</h2>
+							</div>
+							<div class="price_by_night">
+								<span>{{place.price_by_night}}</span>
+							</div>
+						</div>
+						<div class="information">
+							<div class="max_guest">
+								<span>{{place.max_guest}}</span>
+							</div>
+							<div class="number_rooms">
+								<span>{{place.number_rooms}}</span>
+							</div>
+							<div class="number_bathrooms">
+								<span>{{place.number_bathrooms}}</span>
+							</div>
+						</div>
+						<div class="user">
+							<span><strong>Owner</strong>:Allan</span>
+						</div>
+						<div class="description">
+							<p>{{place.description | safe}}
+							</p>
+						</div>
+					</article>
+				</li>
+				{% endfor %}
+				{% endif %}
+			</ul>
 		</section>
 	</div>
 	<footer>

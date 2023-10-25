@@ -63,8 +63,8 @@ body .container .filters .popover {
   width: 100%;
   margin: 0;
   z-index: 999999999999999999;
-  max-height: 300px;
   overflow:scroll;
+  max-height:300px;
 }
 
 div.locations:hover .popover,

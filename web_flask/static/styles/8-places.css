@@ -1,0 +1,88 @@
+.container .places {
+  width: 100%;
+  font-size: 30px;
+  margin-bottom: 100px;
+}
+
+.container .places ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.container .places article {
+  width: 390px;
+  padding: 20px;
+  margin: 20px;
+  border: 1px #ff5a5f solid;
+  border-radius: 4px;
+}
+
+.container .places article .artical-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container .places article .artical-title .article-heading {
+  width: 80%;
+}
+.container .places article .artical-title .article-heading h2 {
+  font-size: 30px;
+  line-height: 1;
+}
+.container .places article .artical-title .price_by_night {
+  width: 20%;
+  position: relative;
+  color: #ff5a5f;
+  border: 4px #ff5a5f solid;
+  border-radius: 50%;
+  min-width: 60px;
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  /* margin: -50px 0 10px 80%; */
+}
+.container .places article .price_by_night span {
+  font-size: 26px;
+  position: absolute;
+  top: 20px;
+}
+.container .places article .information {
+  height: 80px;
+  border-top: 1px #dddddd solid;
+  border-bottom: 1px #dddddd solid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.container .places article .information div {
+  padding: 5px;
+  position: relative;
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.container .places article .information .max_guest {
+  background-image: url(../images/icon_group.png);
+}
+.container .places article .information .number_rooms {
+  background-image: url(../images/icon_bed.png);
+}
+.container .places article .information .number_bathrooms {
+  background-image: url(../images/icon_bath.png);
+}
+.container .places article .information div span {
+  position: absolute;
+  font-size: 10px;
+  top: 60px;
+  left: 30%;
+}
+.container .places article .user {
+  margin-top: 10px;
+  font-size: medium;
+}
+.container .places article .description {
+  font-size: small;
+}
