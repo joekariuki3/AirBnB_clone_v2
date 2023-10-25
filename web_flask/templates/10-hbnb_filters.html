@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>AirBnB clone - Web static</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles/4-common.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles/3-header.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles/3-footer.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles/6-filters.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='images/icon.png') }}">
+</head>
+
+<body>
+	<header>
+		<div class="logo"></div>
+	</header>
+	<div class="container">
+		<section class="filters">
+			<div class="locations">
+				<h3> &nbsp;</h3>
+				<h4>Carlifonia, Arizona</h4>
+				<ul class="popover">
+					{% if states %}
+					{% for state in states|sort(attribute="name")%}
+					<li>
+						<h2>{{state.name}}</h2>
+						<ul>
+							{% if state.cities %}
+							{% for city in state.cities %}
+							<li>{{city.name}}</li>
+							{% endfor%}
+							{% endif%}
+						</ul>
+					</li>
+					{% endfor %}
+					{% endif %}
+				</ul>
+			</div>
+			<div class="amenities">
+				<h3> &nbsp;</h3>
+				<h4>Internet, Kitchen...</h4>
+				<ul class="popover">
+					{% if amenities%}
+					{% for amenity in amenities|sort(attribute="name") %}
+					<li>{{amenity.name}}</li>
+					{% endfor %}
+					{% endif %}
+				</ul>
+			</div>
+			<div class='buttondiv'>
+				<button>search</button>
+			</div>
+		</section>
+	</div>
+	<footer>
+		<p>Best School</p>
+	</footer>
+</body>
+
+</html>
