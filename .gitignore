@@ -5,3 +5,10 @@ versions/*
 *.sql
 *.swn
 *.swo
+
+# environment files
+.env
+.venv
+env/
+venv/
+ENV/
