@@ -1,142 +1,182 @@
-<center> <h1>HBNB - The Console</h1> </center>
+<p align="center">
+    <img src="web_static/images/logo.png" alt="HBNB Logo" width="140" />
+</p>
 
-This repository contains the initial stage of a student project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
+# AirBnB clone v2
 
----
+A minimal, clone of AirBnB built in Python. This version adds a pluggable storage layer (file or MySQL via SQLAlchemy), a command-line console to manage data, a small Flask web front-end, and Fabric scripts to package and deploy static content.
 
-<center><h3>Repository Contents by Project Task</h3> </center>
+## Features
 
-| Tasks | Files | Description |
-| ----- | ----- | ------ |
-| 0: Authors/README File | [AUTHORS](https://github.com/justinmajetich/AirBnB_clone/blob/dev/AUTHORS) | Project authors |
-| 1: Pep8 | N/A | All code is pep8 compliant|
-| 2: Unit Testing | [/tests](https://github.com/justinmajetich/AirBnB_clone/tree/dev/tests) | All class-defining modules are unittested |
-| 3. Make BaseModel | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Defines a parent class to be inherited by all model classes|
-| 4. Update BaseModel w/ kwargs | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Add functionality to recreate an instance of a class from a dictionary representation|
-| 5. Create FileStorage class | [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) [/models/_ _init_ _.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/__init__.py) [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Defines a class to manage persistent file storage system|
-| 6. Console 0.0.1 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) | Add basic functionality to console program, allowing it to quit, handle empty lines and ^D |
-| 7. Console 0.1 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) | Update the console with methods allowing the user to create, destroy, show, and update stored data |
-| 8. Create User class | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) [/models/user.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/user.py) | Dynamically implements a user class |
-| 9. More Classes | [/models/user.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/user.py) [/models/place.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/place.py) [/models/city.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/city.py) [/models/amenity.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/amenity.py) [/models/state.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/state.py) [/models/review.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/review.py) | Dynamically implements more classes |
-| 10. Console 1.0 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) | Update the console and file storage system to work dynamically with all  classes update file storage |
-<br>
-<br>
-<center> <h2>General Use</h2> </center>
+- Python models for core entities: `User`, `State`, `City`, `Place`, `Amenity`, `Review`
+- Two storage engines:
+  - FileStorage (JSON on disk)
+  - DBStorage (MySQL + SQLAlchemy)
+- Interactive console for CRUD and introspection
+- Flask web UI with simple routes and Jinja templates
+- Fabric scripts to package and deploy static web assets
+- Unit tests for models and storage
 
-1. First clone this repository.
-
-3. Once the repository is cloned locate the "console.py" file and run it as follows:
-```
-/AirBnB_clone$ ./console.py
-```
-4. When this command is run the following prompt should appear:
-```
-(hbnb)
-```
-5. This prompt designates you are in the "HBnB" console. There are a variety of commands available within the console program.
-
-##### Commands
-    * create - Creates an instance based on given class
-
-    * destroy - Destroys an object based on class and UUID
-
-    * show - Shows an object based on class and UUID
-
-    * all - Shows all objects the program has access to, or all objects of a given class
-
-    * update - Updates existing attributes an object based on class name and UUID
-
-    * quit - Exits the program (EOF will as well)
-
-
-##### Alternative Syntax
-Users are able to issue a number of console command using an alternative syntax:
-
-	Usage: <class_name>.<command>([<id>[name_arg value_arg]|[kwargs]])
-Advanced syntax is implemented for the following commands: 
-
-    * all - Shows all objects the program has access to, or all objects of a given class
-
-	* count - Return number of object instances by class
-
-    * show - Shows an object based on class and UUID
-
-	* destroy - Destroys an object based on class and UUID
-
-    * update - Updates existing attributes an object based on class name and UUID
-
-<br>
-<br>
-<center> <h2>Examples</h2> </center>
-<h3>Primary Command Syntax</h3>
-
-###### Example 0: Create an object
-Usage: create <class_name>
-```
-(hbnb) create BaseModel
-```
-```
-(hbnb) create BaseModel
-3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb)                   
-```
-###### Example 1: Show an object
-Usage: show <class_name> <_id>
+## Repository structure
 
 ```
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-[BaseModel] (3aa5babc-efb6-4041-bfe9-3cc9727588f8) {'id': '3aa5babc-efb6-4041-bfe9-3cc9727588f8', 'created_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96959), 
-'updated_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96971)}
-(hbnb)  
-```
-###### Example 2: Destroy an object
-Usage: destroy <class_name> <_id>
-```
-(hbnb) destroy BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-** no instance found **
-(hbnb)   
-```
-###### Example 3: Update an object
-Usage: update <class_name> <_id>
-```
-(hbnb) update BaseModel b405fc64-9724-498f-b405-e4071c3d857f first_name "person"
-(hbnb) show BaseModel b405fc64-9724-498f-b405-e4071c3d857f
-[BaseModel] (b405fc64-9724-498f-b405-e4071c3d857f) {'id': 'b405fc64-9724-498f-b405-e4071c3d857f', 'created_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729889), 
-'updated_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729907), 'first_name': 'person'}
-(hbnb)
-```
-<h3>Alternative Syntax</h3>
-
-###### Example 0: Show all User objects
-Usage: <class_name>.all()
-```
-(hbnb) User.all()
-["[User] (99f45908-1d17-46d1-9dd2-b7571128115b) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92071), 'id': '99f45908-1d17-46d1-9dd2-b7571128115b', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92056)}", "[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+models/                 # Data models and storage engines
+web_flask/              # Flask routes, templates, static assets
+web_static/             # Pure static pages (HTML/CSS/images)
+tests/                  # Unit tests
+versions/               # Created by Fabric pack scripts
+console.py              # Interactive CLI
+setup_mysql_*.sql       # MySQL init scripts (dev/test)
+2-do_deploy_web_static.py, 3-deploy_web_static.py, 100-clean_web_static.py
+                                                # Packaging & deploy helpers (Fabric)
 ```
 
-###### Example 1: Destroy a User
-Usage: <class_name>.destroy(<_id>)
+## Prerequisites
+
+- Python 3.8+
+- pip and virtualenv
+- MySQL server (for DB storage)
+- SQLAlchemy
+- Fabric 1.x API for Python 3: install the `fabric3` package
+
+> [!TIP]
+> The Fabric scripts use the Fabric 1 API. On Python 3, prefer `fabric3` (not `fabric>=2`) for compatibility.
+
+## Quick start
+
+Clone and enter the project:
+
+```bash
+git clone https://github.com/joekariuki3/AirBnB_clone_v2.git
+cd AirBnB_clone_v2
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt || pip install sqlalchemy mysqlclient fabric3
 ```
-(hbnb) User.destroy("99f45908-1d17-46d1-9dd2-b7571128115b")
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+
+> [!IMPORTANT]
+> If `mysqlclient` fails to install, ensure you have MySQL dev headers installed on your system (e.g., `libmysqlclient-dev` on Debian/Ubuntu).
+
+## Configure storage
+
+This project supports two storage backends, selected via environment variable:
+
+- File storage (default)
+- MySQL storage (DBStorage)
+
+Set variables in your shell before running anything:
+
+```bash
+# File storage (default)
+export HBNB_TYPE_STORAGE=file
+
+# OR database storage
+export HBNB_TYPE_STORAGE=db
+export HBNB_MYSQL_USER=hbnb_dev
+export HBNB_MYSQL_PWD=hbnb_dev_pwd
+export HBNB_MYSQL_HOST=localhost
+export HBNB_MYSQL_DB=hbnb_dev_db
+# Optional: mark test context to auto-drop tables on engine init
+export HBNB_ENV=dev
 ```
-###### Example 2: Update User (by attribute)
-Usage: <class_name>.update(<_id>, <attribute_name>, <attribute_value>)
+
+See `docs/STORAGE.md` for more details.
+
+## Set up MySQL (for DB storage)
+
+Use the provided scripts to create users and databases:
+
+```bash
+# Development DB
+mysql -u root -p < setup_mysql_dev.sql
+
+# Test DB
+mysql -u root -p < setup_mysql_test.sql
 ```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", name "Todd the Toad")
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'name': 'Todd the Toad', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+
+> [!NOTE]
+> The scripts create users `hbnb_dev` and `hbnb_test` with limited privileges and matching databases.
+
+## Use the console (CLI)
+
+Start the interactive console:
+
+```bash
+./console.py
+# or
+python3 console.py
 ```
-###### Example 3: Update User (by dictionary)
-Usage: <class_name>.update(<_id>, <dictionary>)
+
+Common commands:
+
+- `create <Class> [key=value ...]` — create an instance (supports typed parameters)
+- `show <Class> <id>` — display an instance
+- `destroy <Class> <id>` — delete an instance
+- `all [Class]` — list instances
+- `update <Class> <id> <attr> <value>` — update attribute
+
+Advanced dot notation is also available, e.g. `User.all()`, `City.show("<id>")`, `State.update("<id>", {"name": "New Name"})`.
+
+See `docs/CONSOLE.md` for complete command reference and examples.
+
+## Run the web app (Flask)
+
+The Flask app renders basic pages using data from the selected storage engine.
+
+```bash
+# Example: full HBNB page with filters
+python3 web_flask/100-hbnb.py
+# Visit http://127.0.0.1:5000/hbnb
 ```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", {'name': 'Fred the Frog', 'age': 9})
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+
+Other routes included for learning purposes: `/`, `/c/<text>`, `/python/<text>`, `/number/<n>`, `/states`, `/cities_by_states`, `/hbnb_filters`.
+
+> [!TIP]
+> When using DB storage, the `/hbnb` and filter routes display live data from MySQL via SQLAlchemy models.
+
+## Package and deploy static content (Fabric)
+
+There are three helper scripts:
+
+- `2-do_deploy_web_static.py` — package and deploy in two steps
+- `3-deploy_web_static.py` — single `deploy()` that calls pack+deploy
+- `100-clean_web_static.py` — add `do_clean(number)` to keep last N archives
+
+Before running, edit the `env.hosts` list in the scripts to match your servers (user@host). Then:
+
+```bash
+# Create an archive of web_static/
+fab -f 3-deploy_web_static.py do_pack
+
+# Deploy a specific archive
+fab -f 2-do_deploy_web_static.py do_deploy:/absolute/path/to/archive.tgz
+
+# One-shot pack+deploy
+fab -f 3-deploy_web_static.py deploy
+
+# Keep only the latest archive locally and remotely
+fab -f 100-clean_web_static.py do_clean:1
 ```
-<br>
+
+> [!WARNING]
+> The host IPs in the repository are placeholders. Replace them with your own SSH targets and ensure key-based auth is configured.
+
+## Testing
+
+Run unit tests:
+
+```bash
+python3 -m unittest discover tests
+```
+
+## Troubleshooting
+
+- Fabric errors on import: ensure you installed `fabric3` and not `fabric>=2`.
+- MySQL connection errors: verify `HBNB_MYSQL_*` environment variables and that the target database exists.
+- `mysqlclient` install issues: install system dependencies (e.g., `sudo apt-get install libmysqlclient-dev`).
+- Console shows empty data with DB storage: did you set `HBNB_TYPE_STORAGE=db` and call `storage.reload()` (happens automatically on import)?
+
+## Additional docs
+
+- `docs/CONSOLE.md` — CLI command reference and examples
+- `docs/STORAGE.md` — storage engines and environment configuration
+- `docs/DEPLOY.md` — packaging and deployment with Fabric
