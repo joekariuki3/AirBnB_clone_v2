@@ -1,0 +1,4 @@
+sqlalchemy>=1.4,<3
+mysqlclient>=2.1
+fabric3>=1.14.post1
+flask>=2.0
