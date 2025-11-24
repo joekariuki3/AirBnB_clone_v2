@@ -130,7 +130,7 @@ The Flask app renders basic pages using data from the selected storage engine.
 
 ```bash
 # Example: full HBNB page with filters
-python3 web_flask/100-hbnb.py
+python3 -m web_flask.100-hbnb
 # Visit http://127.0.0.1:5000/hbnb
 ```
 
