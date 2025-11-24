@@ -1,25 +1,26 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
+"""State Module for HBNB project"""
+
 import models
 from models.base_model import BaseModel, Base
 from models.city import City
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from os import getenv
+from .engine import engine_config
 
 
 class State(BaseModel, Base):
-    """ State class """
-    __tablename__ = 'states'
+    """State class"""
 
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
+    __tablename__ = "states"
+
+    if engine_config.storage_type == "db":
         """ use database storage """
-        name = Column('name', String(128), nullable=False)
-        cities = relationship('City', backref='state',
-                              cascade='all, delete-orphan')
+        name = Column("name", String(128), nullable=False)
+        cities = relationship("City", backref="state", cascade="all, delete-orphan")
     else:
         """ use file storage """
-        name = ''
+        name = ""
 
     @property
     def cities(self):

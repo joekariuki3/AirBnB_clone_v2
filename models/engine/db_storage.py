@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
+
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -10,7 +11,7 @@ from models.base_model import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.exc import IntegrityError, OperationalError
-from os import getenv
+from . import engine_config
 
 
 class DBStorage:
@@ -24,16 +25,22 @@ class DBStorage:
         Initialize atributes to be used with the database
         they are environment variables
         """
-        hb_user = getenv("HBNB_MYSQL_USER")
-        hb_pwd = getenv("HBNB_MYSQL_PWD")
-        hb_host = getenv("HBNB_MYSQL_HOST")
-        hb_db = getenv("HBNB_MYSQL_DB")
-        hb_env = getenv("HBNB_ENV")
+        hb_user = engine_config.database_user
+        hb_pwd = engine_config.database_password
+        hb_host = engine_config.database_host
+        hb_db = engine_config.database_name
+        hb_env = engine_config.environment
 
         self.__engine = create_engine(
             f"mysql+mysqldb://{hb_user}:{hb_pwd}@{hb_host}/{hb_db}",
             pool_pre_ping=True,
         )
+        # test connection was a successful
+        try:
+            self.__engine.connect()
+        except (IntegrityError, OperationalError) as e:
+            print("Error connecting to the database:", e)
+            raise
 
         if hb_env == "test":
             Base.metadata.drop_all(self.__engine)
