@@ -63,20 +63,26 @@ This project supports two storage backends, selected via environment variable:
 - File storage (default)
 - MySQL storage (DBStorage)
 
-Set variables in your shell before running anything:
+Make a copy of .env.example to .env
+
+```bash
+cp .env.example .env
+```
+
+Set variables in .env file before running anything:
 
 ```bash
 # File storage (default)
-export HBNB_TYPE_STORAGE=file
+HBNB_TYPE_STORAGE
 
 # OR database storage
-export HBNB_TYPE_STORAGE=db
-export HBNB_MYSQL_USER=hbnb_dev
-export HBNB_MYSQL_PWD=hbnb_dev_pwd
-export HBNB_MYSQL_HOST=localhost
-export HBNB_MYSQL_DB=hbnb_dev_db
+HBNB_TYPE_STORAGE
+HBNB_MYSQL_USER
+HBNB_MYSQL_PWD
+HBNB_MYSQL_HOST
+HBNB_MYSQL_DB
 # Optional: mark test context to auto-drop tables on engine init
-export HBNB_ENV=dev
+HBNB_ENV
 ```
 
 See `docs/STORAGE.md` for more details.
@@ -124,7 +130,7 @@ The Flask app renders basic pages using data from the selected storage engine.
 
 ```bash
 # Example: full HBNB page with filters
-python3 web_flask/100-hbnb.py
+python3 -m web_flask.100-hbnb
 # Visit http://127.0.0.1:5000/hbnb
 ```
 
