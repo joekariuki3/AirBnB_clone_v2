@@ -1,4 +1,11 @@
-sqlalchemy>=1.4,<3
-mysqlclient>=2.1
-fabric3>=1.14.post1
-flask>=2.0
+blinker==1.9.0
+click==8.3.0
+greenlet==3.2.4
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+mysqlclient==2.2.7
+python-dotenv==1.2.1
+SQLAlchemy==2.0.44
+typing_extensions==4.15.0
+Werkzeug==3.1.3
